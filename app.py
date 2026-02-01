@@ -53,23 +53,3 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-
-# Marca d'aua
-st.markdown(
-    """
-    <style>
-    .footer {
-        position: fixed;
-        left: 0;
-        bottom: 10px;
-        width: 100%;
-        color: gray;
-        text-align: right;
-        padding-right: 5px;
-        font-size: 18px;
-    }
-    </style>
-    <div class="footer">Está é uma versão incial de um projeto de indentificação para videos/fotos feitos por IA </div>
-    """,
-    unsafe_allow_html=True
-)
