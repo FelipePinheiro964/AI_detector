@@ -57,7 +57,8 @@ def video(uploaded_video, model, conf_threshold):
         annotated_frame = results[0].plot()
         # Converte de BGR para RGB para o Streamlit mostrar certo
         annotated_frame = cv2.cvtColor(annotated_frame, cv2.COLOR_BGR2RGB)
-        st_frame.image(annotated_frame, channels="RGB")
+        st_frame.image(annotated_frame, channels="RGB", use_container_width=True)
+        time.sleep(0.01)
         
     cap.release()
 
