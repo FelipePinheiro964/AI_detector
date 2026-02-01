@@ -51,7 +51,9 @@ elif opcao == "Vídeo":
         
         cap = cv2.VideoCapture(tfile.name)
         st_frame = st.empty() # Espaço vazio para atualizar o vídeo
-        
+        alerta_site = st.empty() # Espaço para a mensagem no site
+
+
         st.info("Processando vídeo... Os alertas aparecerão abaixo se algo for detectado.")
         
         while cap.isOpened():
@@ -59,8 +61,10 @@ elif opcao == "Vídeo":
             if not ret: break
             
             results = model(frame, conf=conf_threshold, verbose=False)
+
             for r in results:
                 if any(box.conf < 0.5 for box in r.boxes):
+                    alerta_site.error("ANOMALIA DETECTADA: Inconsistência visual identificada!")
                     notification.notify(title="Alerta IA", message="Inconsistência no vídeo!", timeout=2)
             
             annotated_frame = results[0].plot()
