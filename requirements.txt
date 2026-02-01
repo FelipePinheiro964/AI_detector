@@ -5,3 +5,4 @@ plyer
 mss
 Pillow
 numpy
+time

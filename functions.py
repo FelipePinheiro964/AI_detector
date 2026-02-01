@@ -5,6 +5,7 @@ import numpy as np
 from plyer import notification
 from PIL import Image
 from mss import mss
+import time
 
 def foto(uploaded_file, model, conf_threshold):
     # Converte o upload para imagem OpenCV
@@ -35,17 +36,24 @@ def video(uploaded_video, model, conf_threshold):
     st_frame = st.empty() # Espaço para o vídeo
     alerta_site = st.empty() # Espaço para a mensagem
     
+    ultimo_alerta = 0 # Variável para controlar o tempo
+    intervalo_seguranca = 10 # Tempo em segundos entre um alerta e outro
+
     while cap.isOpened():
         ret, frame = cap.read()
         if not ret: break
         
         results = model(frame, conf=conf_threshold, verbose=False)
+
+        agora = time.time() # Pega o horario atual
         
         for r in results:
             if any(box.conf < 0.5 for box in r.boxes):
-                alerta_site.error("⚠️ ANOMALIA DETECTADA: Inconsistência visual identificada!")
-                notification.notify(title="Alerta IA", message="Inconsistência no vídeo!", timeout=2)
-        
+                if agora - ultimo_alerta > intervalo_seguranca:
+                    alerta_site.error("⚠️ ANOMALIA DETECTADA: Inconsistência visual identificada!")
+                    notification.notify(title="Alerta IA", message="Inconsistência no vídeo!", timeout=2)
+                    ultimo_alerta = agora # Reseta o cronômetro
+
         annotated_frame = results[0].plot()
         # Converte de BGR para RGB para o Streamlit mostrar certo
         annotated_frame = cv2.cvtColor(annotated_frame, cv2.COLOR_BGR2RGB)
