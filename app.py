@@ -4,6 +4,8 @@ import numpy as np
 from ultralytics import YOLO
 from PIL import Image
 import tempfile
+import time 
+from plyer import notification
 
 # Configuração inicial
 st.set_page_config(page_title="Detector Protetor", page_icon="🛡️", layout="wide")
@@ -57,11 +59,13 @@ elif opcao == "Vídeo":
             if not ret: break
             
             results = model(frame, conf=conf_threshold, verbose=False)
-            annotated_frame = results[0].plot()
+            for r in results:
+                if any(box.conf < 0.5 for box in r.boxes):
+                    notification.notify(title="Alerta IA", message="Inconsistência no vídeo!", timeout=2)
             
-            # Converte de BGR (OpenCV) para RGB (Streamlit)
+            annotated_frame = results[0].plot()
             annotated_frame = cv2.cvtColor(annotated_frame, cv2.COLOR_BGR2RGB)
             st_frame.image(annotated_frame, channels="RGB")
-            
+        
         cap.release()
         st.success("Análise concluída!")
