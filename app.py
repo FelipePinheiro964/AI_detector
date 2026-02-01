@@ -1,7 +1,13 @@
-import torch
+import streamlit as st
 import cv2
-import mediapipe as mp
+import numpy as np
+from ultralytics import YOLO
+from PIL import Image
+import tempfile
 
-print(f"PyTorch: {torch.__version__}")
-print(f"OpenCV: {cv2.__version__}")
-print(f"MediaPipe: {mp.__version__}")
+# Configuração inicial
+st.set_page_config(page_title="Detector Protetor", page_icon="🛡️", layout="wide")
+model = YOLO('yolov8n.pt') 
+
+st.title("Detector de videos e fotos feitos por IA")
+st.write("Envie uma foto ou vídeo para verificar se existem inconsistências visuais.")
