@@ -1,6 +1,8 @@
 import streamlit as st
 from ultralytics import YOLO
-from functions import video,  foto, monitoramento_tempo_real
+# from functions import video,  foto, monitoramento_tempo_real
+
+from functions import video,  foto
 
 # Configuração inicial
 st.set_page_config(page_title="Detector Protetor", page_icon="🛡️", layout="wide")
