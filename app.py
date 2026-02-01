@@ -38,3 +38,30 @@ if opcao == "Foto":
                 st.warning(f"Atenção: Detectado objeto com baixa confiança ({model.names[int(box.cls)]}). Isso pode ser sinal de manipulação.")
             else:
                 st.write("A detecção não identificou anomalias na imagem.")
+
+elif opcao == "Vídeo":
+    uploaded_video = st.file_uploader("Escolha um vídeo...", type=["mp4", "mov", "avi"])
+    
+    if uploaded_video is not None:
+        # Salva o vídeo temporariamente para o OpenCV ler
+        tfile = tempfile.NamedTemporaryFile(delete=False) 
+        tfile.write(uploaded_video.read())
+        
+        cap = cv2.VideoCapture(tfile.name)
+        st_frame = st.empty() # Espaço vazio para atualizar o vídeo
+        
+        st.info("Processando vídeo... Os alertas aparecerão abaixo se algo for detectado.")
+        
+        while cap.isOpened():
+            ret, frame = cap.read()
+            if not ret: break
+            
+            results = model(frame, conf=conf_threshold, verbose=False)
+            annotated_frame = results[0].plot()
+            
+            # Converte de BGR (OpenCV) para RGB (Streamlit)
+            annotated_frame = cv2.cvtColor(annotated_frame, cv2.COLOR_BGR2RGB)
+            st_frame.image(annotated_frame, channels="RGB")
+            
+        cap.release()
+        st.success("Análise concluída!")
