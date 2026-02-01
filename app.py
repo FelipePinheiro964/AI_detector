@@ -12,7 +12,8 @@ st.write("Envie uma foto ou vídeo para verificar se existem inconsistências vi
 st.sidebar.header("Configurações de Análise")
 conf_threshold = st.sidebar.slider("Confiança Mínima", 0.0, 1.0, 0.5)
 
-opcao = st.radio("Selecione o que deseja analisar:", ("Foto", "Vídeo", "Monitorar Tela"))
+# opcao = st.radio("Selecione o que deseja analisar:", ("Foto", "Vídeo", "Monitorar Tela"))
+opcao = st.radio("Selecione o que deseja analisar:", ("Foto", "Vídeo"))
 
 if opcao == "Foto":
     uploaded_file = st.file_uploader("Escolha uma imagem...", type=["jpg", "jpeg", "png"])
@@ -27,6 +28,26 @@ elif opcao == "Vídeo":
     if uploaded_video is not None:
         video(uploaded_video, model, conf_threshold)
 
-elif opcao == "Monitorar Tela":
-    st.info("O sistema está analisando sua tela inteira agora.")
-    monitoramento_tempo_real(model, conf_threshold)
+# elif opcao == "Monitorar Tela":
+#     st.info("O sistema está analisando sua tela inteira agora.")
+#     monitoramento_tempo_real(model, conf_threshold)
+
+
+st.markdown(
+    """
+    <style>
+    .footer {
+        position: fixed;
+        left: 0;
+        bottom: 10px;
+        width: 100%;
+        color: gray;
+        text-align: right;
+        padding-right: 20px;
+        font-size: 18px;
+    }
+    </style>
+    <div class="footer">Desenvolvido por: Felipe Pinheiro | Estudante de Banco de Dados - PUCRS</div>
+    """,
+    unsafe_allow_html=True
+)

@@ -21,7 +21,7 @@ def foto(uploaded_file, model, conf_threshold):
     # Verifica anomalias
     for box in results[0].boxes:
         if box.conf < 0.55:
-            st.warning(f"Atenção: Detectado objeto com baixa confiança ({model.names[int(box.cls)]}). Isso pode ser sinal de manipulação.")
+            st.warning(f"⚠️ Atenção: Detectado objeto com baixa confiança ({model.names[int(box.cls)]}). Isso pode ser sinal de manipulação.")
         else:
             st.write("A detecção não identificou anomalias na imagem.")
 
@@ -53,33 +53,33 @@ def video(uploaded_video, model, conf_threshold):
         
     cap.release()
 
-
-def monitoramento_tempo_real(model, conf_threshold):
-    sct = mss()
-    monitor = sct.monitors[1] # Captura o monitor principal
+# Não funciona em nuvem
+# def monitoramento_tempo_real(model, conf_threshold):
+#     sct = mss()
+#     monitor = sct.monitors[1] # Captura o monitor principal
     
-    st_frame = st.empty() # Espaço para o vídeo da tela
-    alerta_site = st.empty()
+#     st_frame = st.empty() # Espaço para o vídeo da tela
+#     alerta_site = st.empty()
     
-    # Botão para parar o monitoramento (Streamlit reinicia o script se clicado)
-    if st.button("Parar Monitoramento"):
-        st.rerun()
+#     # Botão para parar o monitoramento (Streamlit reinicia o script se clicado)
+#     if st.button("Parar Monitoramento"):
+#         st.rerun()
 
-    while True:
-        # Captura o frame da tela
-        sct_img = sct.grab(monitor)
-        frame = np.array(sct_img)
-        frame = cv2.cvtColor(frame, cv2.COLOR_BGRA2BGR)
+#     while True:
+#         # Captura o frame da tela
+#         sct_img = sct.grab(monitor)
+#         frame = np.array(sct_img)
+#         frame = cv2.cvtColor(frame, cv2.COLOR_BGRA2BGR)
 
-        results = model(frame, conf=conf_threshold, verbose=False)
+#         results = model(frame, conf=conf_threshold, verbose=False)
         
-        # Lógica de Alerta
-        for r in results:
-            if any(box.conf < 0.5 for box in r.boxes):
-                alerta_site.error("POSSÍVEL FRAUDE OU IA DETECTADA NA TELA!")
-                notification.notify(title="Alerta de Tela", message="Inconsistência detectada!", timeout=1)
+#         # Lógica de Alerta
+#         for r in results:
+#             if any(box.conf < 0.5 for box in r.boxes):
+#                 alerta_site.error("⚠️ POSSÍVEL FRAUDE OU IA DETECTADA NA TELA!")
+#                 notification.notify(title="Alerta de Tela", message="Inconsistência detectada!", timeout=1)
 
-        # Prepara imagem para o Streamlit
-        annotated_frame = results[0].plot()
-        annotated_frame = cv2.cvtColor(annotated_frame, cv2.COLOR_BGR2RGB)
-        st_frame.image(annotated_frame, channels="RGB")
+#         # Prepara imagem para o Streamlit
+#         annotated_frame = results[0].plot()
+#         annotated_frame = cv2.cvtColor(annotated_frame, cv2.COLOR_BGR2RGB)
+#         st_frame.image(annotated_frame, channels="RGB")
