@@ -1,12 +1,6 @@
 import streamlit as st
-import cv2
-import numpy as np
 from ultralytics import YOLO
-from PIL import Image
-import tempfile
-import time 
-from plyer import notification
-from functions import video
+from functions import video,  foto
 
 # Configuração inicial
 st.set_page_config(page_title="Detector Protetor", page_icon="🛡️", layout="wide")
@@ -24,23 +18,8 @@ if opcao == "Foto":
     uploaded_file = st.file_uploader("Escolha uma imagem...", type=["jpg", "jpeg", "png"])
     
     if uploaded_file is not None:
-        # Converte o upload para imagem OpenCV
-        image = Image.open(uploaded_file)
-        img_array = np.array(image)
-        
-        # Roda a detecção
-        results = model(img_array, conf=conf_threshold)
-        
-        # Desenha resultados e mostra
-        res_plotted = results[0].plot()
-        st.image(res_plotted, caption='Resultado da Análise', use_container_width=True)
-        
-        # Verifica anomalias
-        for box in results[0].boxes:
-            if box.conf < 0.55:
-                st.warning(f"Atenção: Detectado objeto com baixa confiança ({model.names[int(box.cls)]}). Isso pode ser sinal de manipulação.")
-            else:
-                st.write("A detecção não identificou anomalias na imagem.")
+        foto(uploaded_file, model, conf_threshold)
+
 
 elif opcao == "Vídeo":
     uploaded_video = st.file_uploader("Escolha um vídeo...", type=["mp4", "mov", "avi"])

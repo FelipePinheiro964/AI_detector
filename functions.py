@@ -3,6 +3,27 @@ import cv2
 import tempfile
 import numpy as np
 from plyer import notification
+from PIL import Image
+import numpy as np
+
+def foto(uploaded_file, model, conf_threshold):
+    # Converte o upload para imagem OpenCV
+    image = Image.open(uploaded_file)
+    img_array = np.array(image)
+    
+    # Roda a detecção
+    results = model(img_array, conf=conf_threshold)
+    
+    # Desenha resultados e mostra
+    res_plotted = results[0].plot()
+    st.image(res_plotted, caption='Resultado da Análise', use_container_width=True)
+    
+    # Verifica anomalias
+    for box in results[0].boxes:
+        if box.conf < 0.55:
+            st.warning(f"Atenção: Detectado objeto com baixa confiança ({model.names[int(box.cls)]}). Isso pode ser sinal de manipulação.")
+        else:
+            st.write("A detecção não identificou anomalias na imagem.")
 
 # Adicionamos 'uploaded_video', 'model' e 'conf_threshold' como parâmetros
 def video(uploaded_video, model, conf_threshold):
