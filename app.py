@@ -49,7 +49,7 @@ st.markdown(
         font-size: 18px;
     }
     </style>
-    <div class="footer">Desenvolvido por: Felipe Pinheiro | Estudante de Banco de Dados - PUCRS</div>
+    <div class="footer">Está é uma versão incial de um projeto a longo prazo | Desenvolvido por: Felipe Pinheiro | Estudante de Banco de Dados - PUCRS</div>
     """,
     unsafe_allow_html=True
 )
