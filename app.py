@@ -6,6 +6,7 @@ from PIL import Image
 import tempfile
 import time 
 from plyer import notification
+from functions import video
 
 # Configuração inicial
 st.set_page_config(page_title="Detector Protetor", page_icon="🛡️", layout="wide")
@@ -45,31 +46,4 @@ elif opcao == "Vídeo":
     uploaded_video = st.file_uploader("Escolha um vídeo...", type=["mp4", "mov", "avi"])
     
     if uploaded_video is not None:
-        # Salva o vídeo temporariamente para o OpenCV ler
-        tfile = tempfile.NamedTemporaryFile(delete=False) 
-        tfile.write(uploaded_video.read())
-        
-        cap = cv2.VideoCapture(tfile.name)
-        st_frame = st.empty() # Espaço vazio para atualizar o vídeo
-        alerta_site = st.empty() # Espaço para a mensagem no site
-
-
-        st.info("Processando vídeo... Os alertas aparecerão abaixo se algo for detectado.")
-        
-        while cap.isOpened():
-            ret, frame = cap.read()
-            if not ret: break
-            
-            results = model(frame, conf=conf_threshold, verbose=False)
-
-            for r in results:
-                if any(box.conf < 0.5 for box in r.boxes):
-                    alerta_site.error("ANOMALIA DETECTADA: Inconsistência visual identificada!")
-                    notification.notify(title="Alerta IA", message="Inconsistência no vídeo!", timeout=2)
-            
-            annotated_frame = results[0].plot()
-            annotated_frame = cv2.cvtColor(annotated_frame, cv2.COLOR_BGR2RGB)
-            st_frame.image(annotated_frame, channels="RGB")
-        
-        cap.release()
-        st.success("Análise concluída!")
+        video(uploaded_video, model, conf_threshold)
