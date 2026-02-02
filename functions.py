@@ -27,7 +27,6 @@ def foto(uploaded_file, model, conf_threshold):
         else:
             st.write("A detecção não identificou anomalias na imagem.")
 
-# Adicionamos 'uploaded_video', 'model' e 'conf_threshold' como parâmetros
 def video(uploaded_video, model, conf_threshold):
     with tempfile.NamedTemporaryFile(delete=False, suffix='.mp4') as tfile:
         tfile.write(uploaded_video.read())
@@ -52,13 +51,13 @@ def video(uploaded_video, model, conf_threshold):
         for r in results:
             if any(box.conf < 0.5 for box in r.boxes):
                 if agora - ultimo_alerta > intervalo_seguranca:
-                    alerta_site.error("🚨 ANOMALIA DETECTADA!")
+                    alerta_site.error("🚨 ANOMALIA DETECTADA: Inconsistência visual identificada!")
                     ultimo_alerta = agora
 
         annotated_frame = results[0].plot()
         annotated_frame = cv2.cvtColor(annotated_frame, cv2.COLOR_BGR2RGB)
         st_frame.image(annotated_frame, channels="RGB", use_container_width=True)
-        time.sleep(0.1)
+        time.sleep(0.05)
 
     cap.release()
     if os.path.exists(temp_path):
