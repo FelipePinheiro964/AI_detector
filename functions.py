@@ -29,14 +29,14 @@ def foto(uploaded_file, model, conf_threshold):
 
 # Adicionamos 'uploaded_video', 'model' e 'conf_threshold' como parâmetros
 def video(uploaded_video, model, conf_threshold):
-    # Salva o vídeo temporariamente para o OpenCV ler
-    tfile = tempfile.NamedTemporaryFile(delete=False) 
-    tfile.write(uploaded_video.read())
-    
-    cap = cv2.VideoCapture(tfile.name)
-    st_frame = st.empty() # Espaço para o vídeo
-    alerta_site = st.empty() # Espaço para a mensagem
-    
+    temp_path = "temp_video.mp4"
+    with open(temp_path, "wb") as f:
+        f.write(uploaded_video.read())
+
+    cap = cv2.VideoCapture(temp_path)
+    st_frame = st.empty()
+    alerta_site = st.empty()
+
     ultimo_alerta = 0 # Variável para controlar o tempo
     intervalo_seguranca = 10 # Tempo em segundos entre um alerta e outro
 
@@ -58,10 +58,15 @@ def video(uploaded_video, model, conf_threshold):
         annotated_frame = results[0].plot()
         # Converte de BGR para RGB para o Streamlit mostrar certo
         annotated_frame = cv2.cvtColor(annotated_frame, cv2.COLOR_BGR2RGB)
+
         st_frame.image(annotated_frame, channels="RGB", use_container_width=True)
-        time.sleep(0.01)
         
+        # Essencial para ceder tempo ao processador do servidor
+        time.sleep(0.03)
+
     cap.release()
+    if os.path.exists(temp_path):
+        os.remove(temp_path)
 
 
 
