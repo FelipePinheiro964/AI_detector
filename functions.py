@@ -33,6 +33,8 @@ def video(uploaded_video, model, conf_threshold):
         temp_path = tfile.name
 
     cap = cv2.VideoCapture(temp_path)
+    
+    # Isso impede que o vídeo crie várias imagens embaixo uma da outra
     st_frame = st.empty()
     alerta_site = st.empty()
     
@@ -44,6 +46,7 @@ def video(uploaded_video, model, conf_threshold):
         if not ret:
             break
         
+        # Reduzir o tamanho é o que faz o vídeo parar de travar na nuvem
         frame = cv2.resize(frame, (640, 480))
         results = model(frame, conf=conf_threshold, verbose=False)
 
@@ -51,18 +54,21 @@ def video(uploaded_video, model, conf_threshold):
         for r in results:
             if any(box.conf < 0.5 for box in r.boxes):
                 if agora - ultimo_alerta > intervalo_seguranca:
-                    alerta_site.error("🚨 ANOMALIA DETECTADA: Inconsistência visual identificada!")
+                    alerta_site.error("🚨 ANOMALIA DETECTADA!")
                     ultimo_alerta = agora
 
         annotated_frame = results[0].plot()
         annotated_frame = cv2.cvtColor(annotated_frame, cv2.COLOR_BGR2RGB)
+        
+        # Atualiza o frame existente em vez de criar um novo
         st_frame.image(annotated_frame, channels="RGB", use_container_width=True)
-        time.sleep(0.05)
+        
+        # Dá tempo para o servidor enviar a imagem para o seu navegador
+        time.sleep(0.01)
 
     cap.release()
     if os.path.exists(temp_path):
         os.remove(temp_path)
-
 
 
 # Não funciona em nuvem

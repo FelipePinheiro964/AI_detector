@@ -1,7 +1,1 @@
-ultralytics
-opencv-python-headless
-streamlit
-plyer
-mss
-Pillow
-numpy
+libgl1
