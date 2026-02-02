@@ -40,11 +40,20 @@ def video(uploaded_video, model, conf_threshold):
     ultimo_alerta = 0 # Variável para controlar o tempo
     intervalo_seguranca = 10 # Tempo em segundos entre um alerta e outro
 
+    frame_count = 0
+
     if st.button("Inciar Analise"):
         while cap.isOpened():
             ret, frame = cap.read()
             if not ret: break
             
+            frame_count += 1
+
+            if frame_count % 2 != 0:
+                continue
+            
+            frame = cv2.resive(frame, (640,360))
+
             results = model(frame, conf=conf_threshold, verbose=False)
 
             agora = time.time() # Pega o horario atual
@@ -56,6 +65,8 @@ def video(uploaded_video, model, conf_threshold):
                         notification.notify(title="Alerta IA", message="Inconsistência no vídeo!", timeout=2)
                         ultimo_alerta = agora # Reseta o cronômetro
 
+
+            
             annotated_frame = results[0].plot()
             # Converte de BGR para RGB para o Streamlit mostrar certo
             annotated_frame = cv2.cvtColor(annotated_frame, cv2.COLOR_BGR2RGB)
