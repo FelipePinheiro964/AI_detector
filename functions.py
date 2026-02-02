@@ -40,29 +40,30 @@ def video(uploaded_video, model, conf_threshold):
     ultimo_alerta = 0 # Variável para controlar o tempo
     intervalo_seguranca = 10 # Tempo em segundos entre um alerta e outro
 
-    while cap.isOpened():
-        ret, frame = cap.read()
-        if not ret: break
-        
-        results = model(frame, conf=conf_threshold, verbose=False)
+    if st.button("Inciar Analise"):
+        while cap.isOpened():
+            ret, frame = cap.read()
+            if not ret: break
+            
+            results = model(frame, conf=conf_threshold, verbose=False)
 
-        agora = time.time() # Pega o horario atual
-        
-        for r in results:
-            if any(box.conf < 0.5 for box in r.boxes):
-                if agora - ultimo_alerta > intervalo_seguranca:
-                    alerta_site.error("⚠️ ANOMALIA DETECTADA: Inconsistência visual identificada!")
-                    notification.notify(title="Alerta IA", message="Inconsistência no vídeo!", timeout=2)
-                    ultimo_alerta = agora # Reseta o cronômetro
+            agora = time.time() # Pega o horario atual
+            
+            for r in results:
+                if any(box.conf < 0.5 for box in r.boxes):
+                    if agora - ultimo_alerta > intervalo_seguranca:
+                        alerta_site.error("⚠️ ANOMALIA DETECTADA: Inconsistência visual identificada!")
+                        notification.notify(title="Alerta IA", message="Inconsistência no vídeo!", timeout=2)
+                        ultimo_alerta = agora # Reseta o cronômetro
 
-        annotated_frame = results[0].plot()
-        # Converte de BGR para RGB para o Streamlit mostrar certo
-        annotated_frame = cv2.cvtColor(annotated_frame, cv2.COLOR_BGR2RGB)
+            annotated_frame = results[0].plot()
+            # Converte de BGR para RGB para o Streamlit mostrar certo
+            annotated_frame = cv2.cvtColor(annotated_frame, cv2.COLOR_BGR2RGB)
 
-        st_frame.image(annotated_frame, channels="RGB", use_container_width=True)
-        
-        # Essencial para ceder tempo ao processador do servidor
-        time.sleep(0.03)
+            st_frame.image(annotated_frame, channels="RGB", use_container_width=True)
+            
+            # Essencial para ceder tempo ao processador do servidor
+            time.sleep(0.03)
 
     cap.release()
     if os.path.exists(temp_path):
