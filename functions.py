@@ -28,14 +28,13 @@ def foto(uploaded_file, model, conf_threshold):
             st.write("A detecção não identificou anomalias na imagem.")
 
 def video(uploaded_video, model, conf_threshold):
+    # Salva temporário
     with tempfile.NamedTemporaryFile(delete=False, suffix='.mp4') as tfile:
         tfile.write(uploaded_video.read())
         temp_path = tfile.name
 
     cap = cv2.VideoCapture(temp_path)
-    
-    # Isso impede que o vídeo crie várias imagens embaixo uma da outra
-    st_frame = st.empty()
+    st_frame = st.empty() # Espaço fixo para o vídeo
     alerta_site = st.empty()
     
     ultimo_alerta = 0
@@ -43,10 +42,9 @@ def video(uploaded_video, model, conf_threshold):
 
     while cap.isOpened():
         ret, frame = cap.read()
-        if not ret:
-            break
+        if not ret: break
         
-        # Reduzir o tamanho é o que faz o vídeo parar de travar na nuvem
+        # REDIMENSIONAR: É o que faz o vídeo fluir na internet de Viamão
         frame = cv2.resize(frame, (640, 480))
         results = model(frame, conf=conf_threshold, verbose=False)
 
@@ -57,14 +55,15 @@ def video(uploaded_video, model, conf_threshold):
                     alerta_site.error("🚨 ANOMALIA DETECTADA!")
                     ultimo_alerta = agora
 
+        # Plota e converte
         annotated_frame = results[0].plot()
         annotated_frame = cv2.cvtColor(annotated_frame, cv2.COLOR_BGR2RGB)
         
-        # Atualiza o frame existente em vez de criar um novo
+        # ATUALIZA o mesmo espaço (não cria novos embaixo)
         st_frame.image(annotated_frame, channels="RGB", use_container_width=True)
         
-        # Dá tempo para o servidor enviar a imagem para o seu navegador
-        time.sleep(0.01)
+        # Dá tempo pro site respirar
+        time.sleep(0.05)
 
     cap.release()
     if os.path.exists(temp_path):
