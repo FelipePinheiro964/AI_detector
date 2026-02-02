@@ -24,10 +24,10 @@ if opcao == "Foto":
         foto(uploaded_file, model, conf_threshold)
 
 
-elif opcao == "Vídeo":
-    uploaded_video = st.file_uploader("Escolha um vídeo...", type=["mp4", "mov", "avi"])
+# elif opcao == "Vídeo":
+#     uploaded_video = st.file_uploader("Escolha um vídeo...", type=["mp4", "mov", "avi"])
     
-    if uploaded_video is not None:
+#     if uploaded_video is not None:
         video(uploaded_video, model, conf_threshold)
 
 elif opcao == "video2":

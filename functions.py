@@ -6,6 +6,7 @@ from plyer import notification
 from PIL import Image
 from mss import mss
 import time
+import os
 
 def foto(uploaded_file, model, conf_threshold):
     # Converte o upload para imagem OpenCV
@@ -27,47 +28,42 @@ def foto(uploaded_file, model, conf_threshold):
             st.write("A detecção não identificou anomalias na imagem.")
 
 # Adicionamos 'uploaded_video', 'model' e 'conf_threshold' como parâmetros
-def video(uploaded_video, model, conf_threshold):
-    # Salva o vídeo temporariamente para o OpenCV ler
-    tfile = tempfile.NamedTemporaryFile(delete=False) 
-    tfile.write(uploaded_video.read())
+# def video(uploaded_video, model, conf_threshold):
+#     # Salva o vídeo temporariamente para o OpenCV ler
+#     tfile = tempfile.NamedTemporaryFile(delete=False) 
+#     tfile.write(uploaded_video.read())
     
-    cap = cv2.VideoCapture(tfile.name)
-    st_frame = st.empty() # Espaço para o vídeo
-    alerta_site = st.empty() # Espaço para a mensagem
+#     cap = cv2.VideoCapture(tfile.name)
+#     st_frame = st.empty() # Espaço para o vídeo
+#     alerta_site = st.empty() # Espaço para a mensagem
     
-    ultimo_alerta = 0 # Variável para controlar o tempo
-    intervalo_seguranca = 10 # Tempo em segundos entre um alerta e outro
+#     ultimo_alerta = 0 # Variável para controlar o tempo
+#     intervalo_seguranca = 10 # Tempo em segundos entre um alerta e outro
 
-    while cap.isOpened():
-        ret, frame = cap.read()
-        if not ret: break
+#     while cap.isOpened():
+#         ret, frame = cap.read()
+#         if not ret: break
         
-        results = model(frame, conf=conf_threshold, verbose=False)
+#         results = model(frame, conf=conf_threshold, verbose=False)
 
-        agora = time.time() # Pega o horario atual
+#         agora = time.time() # Pega o horario atual
         
-        for r in results:
-            if any(box.conf < 0.5 for box in r.boxes):
-                if agora - ultimo_alerta > intervalo_seguranca:
-                    alerta_site.error("⚠️ ANOMALIA DETECTADA: Inconsistência visual identificada!")
-                    notification.notify(title="Alerta IA", message="Inconsistência no vídeo!", timeout=2)
-                    ultimo_alerta = agora # Reseta o cronômetro
+#         for r in results:
+#             if any(box.conf < 0.5 for box in r.boxes):
+#                 if agora - ultimo_alerta > intervalo_seguranca:
+#                     alerta_site.error("⚠️ ANOMALIA DETECTADA: Inconsistência visual identificada!")
+#                     notification.notify(title="Alerta IA", message="Inconsistência no vídeo!", timeout=2)
+#                     ultimo_alerta = agora # Reseta o cronômetro
 
-        annotated_frame = results[0].plot()
-        # Converte de BGR para RGB para o Streamlit mostrar certo
-        annotated_frame = cv2.cvtColor(annotated_frame, cv2.COLOR_BGR2RGB)
-        st_frame.image(annotated_frame, channels="RGB", use_container_width=True)
-        time.sleep(0.01)
+#         annotated_frame = results[0].plot()
+#         # Converte de BGR para RGB para o Streamlit mostrar certo
+#         annotated_frame = cv2.cvtColor(annotated_frame, cv2.COLOR_BGR2RGB)
+#         st_frame.image(annotated_frame, channels="RGB", use_container_width=True)
+#         time.sleep(0.01)
         
-    cap.release()
+#     cap.release()
 
 
-import streamlit as st
-import cv2
-import tempfile
-import os
-import time
 
 def video2(uploaded_video, model, conf_threshold):
     # Usamos um sufixo para garantir que o Linux entenda o formato
