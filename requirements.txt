@@ -1,1 +1,7 @@
-libgl1
+ultralytics
+opencv-python-headless
+streamlit
+plyer
+mss
+Pillow
+numpy

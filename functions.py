@@ -28,13 +28,12 @@ def foto(uploaded_file, model, conf_threshold):
             st.write("A detecção não identificou anomalias na imagem.")
 
 def video(uploaded_video, model, conf_threshold):
-    # Salva temporário
     with tempfile.NamedTemporaryFile(delete=False, suffix='.mp4') as tfile:
         tfile.write(uploaded_video.read())
         temp_path = tfile.name
 
     cap = cv2.VideoCapture(temp_path)
-    st_frame = st.empty() # Espaço fixo para o vídeo
+    st_frame = st.empty()
     alerta_site = st.empty()
     
     ultimo_alerta = 0
@@ -42,9 +41,9 @@ def video(uploaded_video, model, conf_threshold):
 
     while cap.isOpened():
         ret, frame = cap.read()
-        if not ret: break
+        if not ret:
+            break
         
-        # REDIMENSIONAR: É o que faz o vídeo fluir na internet de Viamão
         frame = cv2.resize(frame, (640, 480))
         results = model(frame, conf=conf_threshold, verbose=False)
 
@@ -52,22 +51,18 @@ def video(uploaded_video, model, conf_threshold):
         for r in results:
             if any(box.conf < 0.5 for box in r.boxes):
                 if agora - ultimo_alerta > intervalo_seguranca:
-                    alerta_site.error("🚨 ANOMALIA DETECTADA!")
+                    alerta_site.error("🚨 ANOMALIA DETECTADA: Inconsistência visual identificada!")
                     ultimo_alerta = agora
 
-        # Plota e converte
         annotated_frame = results[0].plot()
         annotated_frame = cv2.cvtColor(annotated_frame, cv2.COLOR_BGR2RGB)
-        
-        # ATUALIZA o mesmo espaço (não cria novos embaixo)
         st_frame.image(annotated_frame, channels="RGB", use_container_width=True)
-        
-        # Dá tempo pro site respirar
         time.sleep(0.05)
 
     cap.release()
     if os.path.exists(temp_path):
         os.remove(temp_path)
+
 
 
 # Não funciona em nuvem
