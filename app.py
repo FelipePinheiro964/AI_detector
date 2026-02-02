@@ -2,7 +2,7 @@ import streamlit as st
 from ultralytics import YOLO
 # from functions import video,  foto, monitoramento_tempo_real
 
-from functions import video,  foto, video2
+from functions import  foto, video2
 
 # Configuração inicial
 st.set_page_config(page_title="Detector Protetor", page_icon="🛡️", layout="wide")
@@ -28,13 +28,13 @@ if opcao == "Foto":
 #     uploaded_video = st.file_uploader("Escolha um vídeo...", type=["mp4", "mov", "avi"])
     
 #     if uploaded_video is not None:
-        video(uploaded_video, model, conf_threshold)
+        # video(uploaded_video, model, conf_threshold)
 
 elif opcao == "video2":
     uploaded_video = st.file_uploader("Escolha um vídeo...", type=["mp4", "mov", "avi"])
     
     if uploaded_video is not None:
-        video(uploaded_video, model, conf_threshold)
+        video2(uploaded_video, model, conf_threshold)
 
 # elif opcao == "Monitorar Tela":
 #     st.info("O sistema está analisando sua tela inteira agora.")
