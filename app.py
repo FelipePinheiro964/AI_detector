@@ -2,7 +2,7 @@ import streamlit as st
 from ultralytics import YOLO
 # from functions import video,  foto, monitoramento_tempo_real
 
-from functions import video,  foto
+from functions import video,  foto, video2
 
 # Configuração inicial
 st.set_page_config(page_title="Detector Protetor", page_icon="🛡️", layout="wide")
@@ -15,7 +15,7 @@ st.sidebar.header("Configurações de Análise")
 conf_threshold = st.sidebar.slider("Confiança Mínima", 0.0, 1.0, 0.5)
 
 # opcao = st.radio("Selecione o que deseja analisar:", ("Foto", "Vídeo", "Monitorar Tela"))
-opcao = st.radio("Selecione o que deseja analisar:", ("Foto", "Vídeo"))
+opcao = st.radio("Selecione o que deseja analisar:", ("Foto", "Vídeo", "video2"))
 
 if opcao == "Foto":
     uploaded_file = st.file_uploader("Escolha uma imagem...", type=["jpg", "jpeg", "png"])
@@ -30,11 +30,17 @@ elif opcao == "Vídeo":
     if uploaded_video is not None:
         video(uploaded_video, model, conf_threshold)
 
+elif opcao == "video2":
+    uploaded_video = st.file_uploader("Escolha um vídeo...", type=["mp4", "mov", "avi"])
+    
+    if uploaded_video is not None:
+        video(uploaded_video, model, conf_threshold)
+
 # elif opcao == "Monitorar Tela":
 #     st.info("O sistema está analisando sua tela inteira agora.")
 #     monitoramento_tempo_real(model, conf_threshold)
 
-# Marca d'aua
+# Marca d'agua
 st.markdown(
     """
     <style>

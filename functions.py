@@ -62,6 +62,64 @@ def video(uploaded_video, model, conf_threshold):
         
     cap.release()
 
+
+import streamlit as st
+import cv2
+import tempfile
+import os
+import time
+
+def video2(uploaded_video, model, conf_threshold):
+    # Usamos um sufixo para garantir que o Linux entenda o formato
+    with tempfile.NamedTemporaryFile(delete=False, suffix='.mp4') as tfile:
+        tfile.write(uploaded_video.read())
+        temp_path = tfile.name
+
+    cap = cv2.VideoCapture(temp_path)
+    
+    # Criamos o container do vídeo e dos alertas
+    st_frame = st.empty()
+    alerta_site = st.empty()
+    
+    ultimo_alerta = 0
+    intervalo_seguranca = 5
+
+    # Verificamos se o vídeo abriu corretamente
+    if not cap.isOpened():
+        st.error("Erro ao carregar o vídeo. Tente outro formato.")
+        return
+
+    while cap.isOpened():
+        ret, frame = cap.read()
+        if not ret:
+            break
+        
+        # Redimensiona o frame para processar mais rápido na nuvem
+        frame = cv2.resize(frame, (640, 480))
+        
+        results = model(frame, conf=conf_threshold, verbose=False)
+        
+        agora = time.time()
+        for r in results:
+            if any(box.conf < 0.5 for box in r.boxes):
+                if agora - ultimo_alerta > intervalo_seguranca:
+                    alerta_site.error("⚠️ ANOMALIA DETECTADA!")
+                    # Removi a notificação plyer aqui para não dar erro na nuvem
+                    ultimo_alerta = agora
+
+        # Converte e exibe
+        annotated_frame = results[0].plot()
+        annotated_frame = cv2.cvtColor(annotated_frame, cv2.COLOR_BGR2RGB)
+        
+        # O pulo do gato: usamos use_container_width e um pequeno sleep
+        st_frame.image(annotated_frame, channels="RGB", use_container_width=True)
+        time.sleep(0.01) # Essencial para o navegador "respirar" e mostrar o frame
+
+    cap.release()
+    # Limpa o arquivo temporário para não encher o servidor
+    os.remove(temp_path)
+    st.success("Análise concluída!")
+
 # Não funciona em nuvem
 # def monitoramento_tempo_real(model, conf_threshold):
 #     sct = mss()
