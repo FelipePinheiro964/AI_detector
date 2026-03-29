@@ -46,6 +46,32 @@ def score_frequency_analysis(frame):
     if center_ratio > 12: score += 0.25
     return float(min(score, 0.75))
 
+def score_noise_pattern(frame):
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY).astype(np.float32)
+    residual = (gray - cv2.GaussianBlur(gray, (5, 5), 0)).flatten()[:2000]
+    ac = np.correlate(residual, residual, mode='full')
+    ac = ac[len(ac)//2:]
+    ac /= (ac[0] + 1e-7)
+    lag10 = abs(ac[10]) if len(ac) > 10 else 0
+    if lag10 > 0.15: return 0.65
+    if lag10 > 0.08: return 0.40
+    return 0.15
+
+def score_compression_artifacts(frame):
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    h, w = gray.shape
+    diffs = []
+    for y in range(0, h - 8, 8):
+        for x in range(0, w - 16, 8):
+            b1 = gray[y:y+8, x:x+8].astype(float)
+            b2 = gray[y:y+8, x+8:x+16].astype(float)
+            diffs.append(abs(b1[:, -1].mean() - b2[:, 0].mean()))
+    if not diffs: return 0.25
+    bd = np.mean(diffs)
+    if bd < 2.0:  return 0.60
+    if bd > 15.0: return 0.20
+    return 0.30
+
 def score_temporal_consistency(frames):
     if len(frames) < 3:
         return 0.3
