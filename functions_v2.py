@@ -45,3 +45,34 @@ def score_frequency_analysis(frame):
     if quad_var < 0.02:   score += 0.30
     if center_ratio > 12: score += 0.25
     return float(min(score, 0.75))
+
+def score_temporal_consistency(frames):
+    if len(frames) < 3:
+        return 0.3
+    diffs = []
+    for i in range(1, len(frames)):
+        f1 = cv2.cvtColor(frames[i-1], cv2.COLOR_BGR2GRAY).astype(float)
+        f2 = cv2.cvtColor(frames[i],   cv2.COLOR_BGR2GRAY).astype(float)
+        diffs.append(np.abs(f1 - f2).mean())
+    diffs = np.array(diffs)
+    cv = diffs.std() / (diffs.mean() + 1e-7)
+    if cv > 1.5 or cv < 0.05: return 0.70
+    if cv > 0.8:               return 0.50
+    return 0.20
+
+def score_motion_naturalness(frames):
+    if len(frames) < 5:
+        return 0.3
+    flows = []
+    for i in range(1, min(len(frames), 20)):
+        g1 = cv2.cvtColor(frames[i-1], cv2.COLOR_BGR2GRAY)
+        g2 = cv2.cvtColor(frames[i],   cv2.COLOR_BGR2GRAY)
+        flow = cv2.calcOpticalFlowFarneback(g1, g2, None, 0.5, 3, 15, 3, 5, 1.2, 0)
+        mag  = np.sqrt(flow[..., 0]**2 + flow[..., 1]**2)
+        flows.append(mag.mean())
+    flows = np.array(flows)
+    if len(flows) < 2: return 0.3
+    accel_var = np.diff(np.diff(flows)).var()
+    if accel_var < 0.001: return 0.65
+    if accel_var > 50:    return 0.60
+    return 0.20
