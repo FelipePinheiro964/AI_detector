@@ -98,3 +98,29 @@ def score_facial_artifacts(frame):
         if edge_ratio < 0.03: s += 0.30
         scores.append(min(s, 0.85))
     return float(np.mean(scores))
+
+# Centraliza os metadados e pesos
+
+INDICATOR_META = {
+    "texture_uniformity":    {"label": "Textura da imagem",            "desc": "Superfície artificial excessivamente lisa"},
+    "color_anomaly":         {"label": "Distribuição de cores",         "desc": "Cores com padrão incomum"},
+    "frequency_artifacts":   {"label": "Padrão de frequência",          "desc": "Assinatura espectral de IA generativa"},
+    "noise_pattern":         {"label": "Padrão de ruído",               "desc": "Ruído estruturado (não aleatório)"},
+    "compression_pattern":   {"label": "Compressão do vídeo",           "desc": "Blocos inconsistentes com câmera real"},
+    "temporal_inconsistency":{"label": "Estabilidade entre frames",     "desc": "Tremido ou piscadas artificiais"},
+    "motion_unnaturalness":  {"label": "Naturalidade do movimento",     "desc": "Movimentos mecânicos ou erráticos"},
+    "facial_artifacts":      {"label": "Rostos encontrados",            "desc": "Simetria excessiva e bordas suaves"},
+    "yolo_anomaly":          {"label": "Detecção YOLOv8",               "desc": "Objetos com baixa confiança"},
+}
+
+WEIGHTS = {
+    "texture_uniformity":     1.5,
+    "color_anomaly":          1.0,
+    "frequency_artifacts":    2.0,
+    "noise_pattern":          2.0,
+    "compression_pattern":    1.0,
+    "temporal_inconsistency": 1.8,
+    "motion_unnaturalness":   1.8,
+    "facial_artifacts":       2.5,
+    "yolo_anomaly":           2.0,
+}
