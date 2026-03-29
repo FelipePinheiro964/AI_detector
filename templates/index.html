@@ -1,0 +1,1114 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VerifAI — Será que é de verdade?</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --cream: #faf7f2;
+        --warm: #f2ece0;
+        --paper: #fffdf8;
+        --ink: #1c1a17;
+        --brown: #5c4a32;
+        --amber: #c8832a;
+        --border: #ddd5c4;
+        --shadow: rgba(92, 74, 50, 0.12);
+        --red: #c0392b;
+        --red-l: #fdecea;
+        --orange-l: #fef5e7;
+        --yellow-l: #fefde7;
+        --green: #2e7d4f;
+        --green-l: #eaf4ee;
+        --r: 16px;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        background: var(--cream);
+        color: var(--ink);
+        font-family: "DM Sans", sans-serif;
+        font-size: 19px;
+        line-height: 1.65;
+      }
+
+      /* TOPBAR */
+      .topbar {
+        background: var(--paper);
+        border-bottom: 2px solid var(--border);
+        padding: 18px 32px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        box-shadow: 0 2px 16px var(--shadow);
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .logo-mark {
+        width: 46px;
+        height: 46px;
+        background: var(--amber);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .logo-mark svg {
+        width: 26px;
+        height: 26px;
+        stroke: #fff;
+        fill: none;
+        stroke-width: 2.2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .logo-text {
+        font-family: "Lora", serif;
+        font-weight: 700;
+        font-size: 1.5rem;
+      }
+      .logo-sub {
+        font-size: 0.8rem;
+        color: var(--brown);
+      }
+      .nav-hint {
+        font-size: 0.82rem;
+        color: var(--brown);
+        background: var(--warm);
+        padding: 8px 16px;
+        border-radius: 30px;
+        border: 1px solid var(--border);
+      }
+
+      /* HERO */
+      .hero {
+        background: var(--paper);
+        border-bottom: 2px solid var(--border);
+        padding: 64px 32px 56px;
+        text-align: center;
+      }
+      .hero-eyebrow {
+        display: inline-block;
+        font-size: 0.82rem;
+        font-weight: 600;
+        letter-spacing: 2.5px;
+        text-transform: uppercase;
+        color: var(--amber);
+        background: rgba(200, 131, 42, 0.1);
+        border: 1px solid rgba(200, 131, 42, 0.3);
+        padding: 6px 18px;
+        border-radius: 30px;
+        margin-bottom: 24px;
+      }
+      .hero h1 {
+        font-family: "Lora", serif;
+        font-size: clamp(2rem, 4.5vw, 3rem);
+        font-weight: 700;
+        line-height: 1.25;
+        margin-bottom: 20px;
+        max-width: 680px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .hero h1 em {
+        font-style: italic;
+        color: var(--amber);
+      }
+      .hero-desc {
+        font-size: 1.15rem;
+        color: var(--brown);
+        max-width: 520px;
+        margin: 0 auto 40px;
+        line-height: 1.7;
+      }
+      .hero-cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: var(--amber);
+        color: #fff;
+        font-weight: 600;
+        font-size: 1.05rem;
+        padding: 16px 36px;
+        border-radius: 50px;
+        text-decoration: none;
+        box-shadow: 0 4px 20px rgba(200, 131, 42, 0.4);
+        transition: transform 0.2s;
+      }
+      .hero-cta:hover {
+        transform: translateY(-2px);
+      }
+      .hero-cta svg {
+        width: 20px;
+        height: 20px;
+        stroke: #fff;
+        fill: none;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      /* TRUST */
+      .trust-strip {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        background: var(--warm);
+        border-bottom: 2px solid var(--border);
+      }
+      .trust-item {
+        padding: 20px 32px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 0.88rem;
+        color: var(--brown);
+        font-weight: 500;
+        border-right: 1px solid var(--border);
+      }
+      .trust-item:last-child {
+        border-right: none;
+      }
+      .trust-item svg {
+        width: 18px;
+        height: 18px;
+        stroke: var(--amber);
+        fill: none;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        flex-shrink: 0;
+      }
+
+      /* MAIN */
+      .main {
+        max-width: 780px;
+        margin: 0 auto;
+        padding: 56px 24px 80px;
+      }
+
+      /* UPLOAD CARD */
+      .upload-section {
+        background: var(--paper);
+        border: 2px solid var(--border);
+        border-radius: var(--r);
+        padding: 40px;
+        margin-bottom: 32px;
+        box-shadow: 0 4px 24px var(--shadow);
+      }
+      .step-indicator {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 28px;
+      }
+      .step-num {
+        width: 36px;
+        height: 36px;
+        background: var(--amber);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Lora", serif;
+        font-weight: 700;
+        color: #fff;
+        flex-shrink: 0;
+      }
+      .step-text {
+        font-family: "Lora", serif;
+        font-size: 1.15rem;
+        font-weight: 600;
+      }
+      .step-hint {
+        font-size: 0.82rem;
+        color: var(--brown);
+      }
+
+      .drop-zone {
+        border: 3px dashed var(--border);
+        border-radius: 12px;
+        padding: 52px 24px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.25s;
+        position: relative;
+        background: var(--cream);
+      }
+      .drop-zone:hover,
+      .drop-zone.dragover {
+        border-color: var(--amber);
+        background: rgba(200, 131, 42, 0.04);
+      }
+      .drop-zone input {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        cursor: pointer;
+        width: 100%;
+        height: 100%;
+      }
+      .drop-icon {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 16px;
+      }
+      .drop-icon svg {
+        width: 52px;
+        height: 52px;
+        stroke: var(--border);
+        fill: none;
+        stroke-width: 1.5;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        transition: stroke 0.25s;
+      }
+      .drop-zone:hover .drop-icon svg,
+      .drop-zone.dragover .drop-icon svg {
+        stroke: var(--amber);
+      }
+      .drop-main {
+        font-family: "Lora", serif;
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 8px;
+      }
+      .drop-formats {
+        font-size: 0.82rem;
+        color: var(--brown);
+      }
+
+      .file-chosen {
+        display: none;
+        margin-top: 18px;
+        padding: 16px 20px;
+        background: var(--green-l);
+        border: 1.5px solid #a8d5b8;
+        border-radius: 10px;
+        align-items: center;
+        gap: 12px;
+        font-size: 0.92rem;
+      }
+      .file-chosen.show {
+        display: flex;
+      }
+      .file-chosen svg {
+        width: 20px;
+        height: 20px;
+        stroke: var(--green);
+        fill: none;
+        stroke-width: 2.5;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        flex-shrink: 0;
+      }
+      .file-chosen .fc-name {
+        flex: 1;
+        color: var(--green);
+        font-weight: 600;
+        word-break: break-all;
+      }
+      .file-chosen .fc-size {
+        color: var(--brown);
+        font-size: 0.82rem;
+      }
+
+      .btn-check {
+        display: flex;
+        width: 100%;
+        margin-top: 24px;
+        padding: 20px;
+        background: var(--amber);
+        border: none;
+        border-radius: 12px;
+        font-family: "Lora", serif;
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: #fff;
+        cursor: pointer;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        box-shadow: 0 4px 16px rgba(200, 131, 42, 0.35);
+        transition: all 0.2s;
+      }
+      .btn-check svg {
+        width: 22px;
+        height: 22px;
+        stroke: #fff;
+        fill: none;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .btn-check:hover {
+        transform: translateY(-1px);
+      }
+      .btn-check:disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      /* LOADING */
+      .loading-state {
+        display: none;
+        text-align: center;
+        padding: 32px 0 8px;
+      }
+      .loading-state.show {
+        display: block;
+      }
+      .spinner {
+        width: 52px;
+        height: 52px;
+        border: 4px solid var(--border);
+        border-top-color: var(--amber);
+        border-radius: 50%;
+        animation: spin 0.9s linear infinite;
+        margin: 0 auto 16px;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .loading-label {
+        font-family: "Lora", serif;
+        font-size: 1.05rem;
+        color: var(--brown);
+      }
+      .loading-sub {
+        font-size: 0.82rem;
+        color: var(--brown);
+        margin-top: 6px;
+        opacity: 0.7;
+      }
+
+      /* RESULTADO */
+      #result {
+        display: none;
+      }
+      #result.show {
+        display: block;
+      }
+
+      .result-card {
+        border: 2.5px solid;
+        border-radius: var(--r);
+        overflow: hidden;
+        margin-bottom: 24px;
+        box-shadow: 0 6px 32px var(--shadow);
+      }
+      .result-card.red {
+        border-color: #e8a0a0;
+      }
+      .result-card.orange {
+        border-color: #f0c080;
+      }
+      .result-card.yellow {
+        border-color: #e0d080;
+      }
+      .result-card.green {
+        border-color: #90c8a8;
+      }
+
+      .verdict-band {
+        padding: 32px 36px;
+        display: flex;
+        align-items: center;
+        gap: 28px;
+        flex-wrap: wrap;
+      }
+      .verdict-band.red {
+        background: var(--red-l);
+      }
+      .verdict-band.orange {
+        background: var(--orange-l);
+      }
+      .verdict-band.yellow {
+        background: var(--yellow-l);
+      }
+      .verdict-band.green {
+        background: var(--green-l);
+      }
+
+      .verdict-icon svg {
+        width: 52px;
+        height: 52px;
+        fill: none;
+        stroke-width: 1.8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .verdict-icon.red svg {
+        stroke: var(--red);
+      }
+      .verdict-icon.orange svg {
+        stroke: #b55a00;
+      }
+      .verdict-icon.yellow svg {
+        stroke: #7a6500;
+      }
+      .verdict-icon.green svg {
+        stroke: var(--green);
+      }
+
+      .verdict-body {
+        flex: 1;
+      }
+      .verdict-main {
+        font-family: "Lora", serif;
+        font-size: 1.6rem;
+        font-weight: 700;
+        line-height: 1.2;
+        margin-bottom: 6px;
+      }
+      .verdict-main.red {
+        color: var(--red);
+      }
+      .verdict-main.orange {
+        color: #b55a00;
+      }
+      .verdict-main.yellow {
+        color: #7a6500;
+      }
+      .verdict-main.green {
+        color: var(--green);
+      }
+      .verdict-sub {
+        font-size: 0.95rem;
+        color: var(--brown);
+      }
+
+      .probability-badge {
+        text-align: center;
+        flex-shrink: 0;
+      }
+      .prob-num {
+        font-family: "Lora", serif;
+        font-size: 3rem;
+        font-weight: 700;
+        line-height: 1;
+      }
+      .prob-num.red {
+        color: var(--red);
+      }
+      .prob-num.orange {
+        color: #b55a00;
+      }
+      .prob-num.yellow {
+        color: #7a6500;
+      }
+      .prob-num.green {
+        color: var(--green);
+      }
+      .prob-label {
+        font-size: 0.78rem;
+        color: var(--brown);
+        margin-top: 4px;
+      }
+
+      .meta-row {
+        display: flex;
+        flex-wrap: wrap;
+        border-top: 1.5px solid var(--border);
+        background: var(--paper);
+      }
+      .meta-cell {
+        flex: 1;
+        min-width: 120px;
+        padding: 16px 24px;
+        border-right: 1px solid var(--border);
+        font-size: 0.82rem;
+        color: var(--brown);
+      }
+      .meta-cell:last-child {
+        border-right: none;
+      }
+      .meta-cell strong {
+        display: block;
+        font-size: 1rem;
+        color: var(--ink);
+        font-weight: 600;
+        margin-bottom: 2px;
+      }
+
+      .plain-explain {
+        padding: 28px 36px;
+        background: var(--paper);
+        border-top: 1.5px solid var(--border);
+      }
+      .plain-title {
+        font-family: "Lora", serif;
+        font-size: 1.05rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .plain-title svg {
+        width: 20px;
+        height: 20px;
+        stroke: var(--amber);
+        fill: none;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        flex-shrink: 0;
+      }
+      .plain-text {
+        font-size: 0.97rem;
+        color: var(--brown);
+        line-height: 1.75;
+      }
+      .plain-text strong {
+        color: var(--ink);
+      }
+
+      .indicators-section {
+        padding: 28px 36px 32px;
+        background: var(--cream);
+        border-top: 1.5px solid var(--border);
+      }
+      .ind-title {
+        font-family: "Lora", serif;
+        font-size: 1rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .ind-title svg {
+        width: 20px;
+        height: 20px;
+        stroke: var(--amber);
+        fill: none;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .ind-list {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+      .ind-item {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        background: var(--paper);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 14px 18px;
+      }
+      .ind-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+      .ind-dot.high {
+        background: var(--red);
+      }
+      .ind-dot.medium {
+        background: var(--amber);
+      }
+      .ind-dot.low {
+        background: var(--green);
+      }
+      .ind-label {
+        flex: 1;
+        font-size: 0.9rem;
+        font-weight: 500;
+      }
+      .ind-desc {
+        font-size: 0.78rem;
+        color: var(--brown);
+        margin-top: 2px;
+      }
+      .ind-bar-wrap {
+        width: 100px;
+      }
+      .ind-bar-bg {
+        height: 6px;
+        background: var(--border);
+        border-radius: 3px;
+        overflow: hidden;
+      }
+      .ind-bar-fill {
+        height: 100%;
+        border-radius: 3px;
+        width: 0%;
+        transition: width 1.2s ease;
+      }
+      .ind-bar-fill.high {
+        background: var(--red);
+      }
+      .ind-bar-fill.medium {
+        background: var(--amber);
+      }
+      .ind-bar-fill.low {
+        background: var(--green);
+      }
+      .ind-pct {
+        font-size: 0.72rem;
+        color: var(--brown);
+        text-align: right;
+        margin-top: 3px;
+      }
+
+      .error-card {
+        display: none;
+        background: var(--red-l);
+        border: 2px solid #e8a0a0;
+        border-radius: var(--r);
+        padding: 20px 24px;
+        margin-bottom: 24px;
+        font-size: 0.97rem;
+        color: var(--red);
+        align-items: center;
+        gap: 12px;
+      }
+      .error-card.show {
+        display: flex;
+      }
+      .error-card svg {
+        width: 22px;
+        height: 22px;
+        stroke: var(--red);
+        fill: none;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        flex-shrink: 0;
+      }
+
+      footer {
+        background: var(--warm);
+        border-top: 2px solid var(--border);
+        padding: 36px 32px;
+        text-align: center;
+        font-size: 0.82rem;
+        color: var(--brown);
+        line-height: 2;
+      }
+      footer strong {
+        color: var(--ink);
+      }
+
+      @media (max-width: 600px) {
+        .trust-strip {
+          flex-direction: column;
+        }
+        .trust-item {
+          border-right: none;
+          border-bottom: 1px solid var(--border);
+        }
+        .upload-section,
+        .plain-explain,
+        .indicators-section {
+          padding: 24px;
+        }
+        .verdict-band {
+          padding: 24px;
+          gap: 16px;
+        }
+        .nav-hint {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="topbar">
+      <div class="logo">
+        <div class="logo-mark">
+          <svg viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+        </div>
+        <div>
+          <div class="logo-text">VerifAI</div>
+          <div class="logo-sub">Verificador de imagens e vídeos</div>
+        </div>
+      </div>
+      <div class="nav-hint">Gratuito · Simples · Seguro</div>
+    </div>
+
+    <div class="hero">
+      <div class="hero-eyebrow">Proteção contra desinformação</div>
+      <h1>Esse vídeo ou foto é <em>de verdade?</em></h1>
+      <p class="hero-desc">
+        Envie qualquer imagem ou vídeo e em segundos descubra se foi criado por
+        inteligência artificial ou é conteúdo real.
+      </p>
+      <a href="#analisar" class="hero-cta">
+        <svg viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="8" />
+          <line x1="21" y1="21" x2="16.65" y2="16.65" />
+        </svg>
+        Verificar agora
+      </a>
+    </div>
+
+    <div class="trust-strip">
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+        </svg>
+        Seu arquivo não é salvo
+      </div>
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10" />
+          <polyline points="12 6 12 12 16 14" />
+        </svg>
+        Resultado em até 30 segundos
+      </div>
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24">
+          <line x1="12" y1="1" x2="12" y2="23" />
+          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+        </svg>
+        Completamente gratuito
+      </div>
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="2" y1="12" x2="22" y2="12" />
+          <path
+            d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+          />
+        </svg>
+        Em português
+      </div>
+    </div>
+
+    <div class="main">
+      <div id="analisar" class="upload-section">
+        <div class="step-indicator">
+          <div class="step-num">1</div>
+          <div>
+            <div class="step-text">Escolha o arquivo para verificar</div>
+            <div class="step-hint">Foto ou vídeo de qualquer rede social</div>
+          </div>
+        </div>
+
+        <div class="drop-zone" id="dropZone">
+          <input type="file" id="fileInput" accept="video/*,image/*" />
+          <div class="drop-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="17 8 12 3 7 8" />
+              <line x1="12" y1="3" x2="12" y2="15" />
+            </svg>
+          </div>
+          <div class="drop-main">Toque aqui para escolher o arquivo</div>
+          <div class="drop-formats">MP4 · MOV · AVI · JPG · PNG · e outros</div>
+        </div>
+
+        <div class="file-chosen" id="fileChosen">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12" /></svg>
+          <span class="fc-name" id="fcName">—</span>
+          <span class="fc-size" id="fcSize">—</span>
+        </div>
+
+        <button class="btn-check" id="btnCheck" disabled>
+          <svg viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+          Verificar este arquivo
+        </button>
+
+        <div class="loading-state" id="loadingState">
+          <div class="spinner"></div>
+          <div class="loading-label">Analisando o arquivo…</div>
+          <div class="loading-sub">Isso pode levar alguns segundos</div>
+        </div>
+      </div>
+
+      <div class="error-card" id="errorCard">
+        <svg viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="8" x2="12" y2="12" />
+          <line x1="12" y1="16" x2="12.01" y2="16" />
+        </svg>
+        <span id="errorText"></span>
+      </div>
+
+      <div id="result">
+        <div class="result-card" id="resultCard">
+          <div class="verdict-band" id="verdictBand">
+            <div class="verdict-icon" id="verdictIcon"></div>
+            <div class="verdict-body">
+              <div class="verdict-main" id="verdictMain">—</div>
+              <div class="verdict-sub" id="verdictSub">—</div>
+            </div>
+            <div class="probability-badge">
+              <div class="prob-num" id="probNum">—</div>
+              <div class="prob-label">probabilidade<br />de ser IA</div>
+            </div>
+          </div>
+
+          <div class="meta-row">
+            <div class="meta-cell"><strong id="metaDur">—</strong>Duração</div>
+            <div class="meta-cell"><strong id="metaFps">—</strong>FPS</div>
+            <div class="meta-cell">
+              <strong id="metaFrames">—</strong>Frames analisados
+            </div>
+            <div class="meta-cell">
+              <strong id="metaFaces">—</strong>Rostos encontrados
+            </div>
+          </div>
+
+          <div class="plain-explain">
+            <div class="plain-title">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+                />
+              </svg>
+              O que isso significa?
+            </div>
+            <div class="plain-text" id="plainText">—</div>
+          </div>
+
+          <div class="indicators-section">
+            <div class="ind-title">
+              <svg viewBox="0 0 24 24">
+                <line x1="18" y1="20" x2="18" y2="10" />
+                <line x1="12" y1="20" x2="12" y2="4" />
+                <line x1="6" y1="20" x2="6" y2="14" />
+              </svg>
+              O que analisamos
+            </div>
+            <div class="ind-list" id="indList"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <strong>VerifAI</strong> · Verificador de conteúdo gerado por IA<br />
+      Os resultados são indicativos — nenhuma ferramenta é 100% precisa.<br />
+      Seus arquivos não são armazenados ou compartilhados.
+    </footer>
+
+    <script>
+      const dropZone = document.getElementById("dropZone");
+      const fileInput = document.getElementById("fileInput");
+      const btnCheck = document.getElementById("btnCheck");
+      const fileChosen = document.getElementById("fileChosen");
+      const loadingState = document.getElementById("loadingState");
+      const errorCard = document.getElementById("errorCard");
+      const result = document.getElementById("result");
+
+      const VERDICT_ICONS = {
+        red: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`,
+        orange: `<svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`,
+        yellow: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`,
+        green: `<svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`,
+      };
+
+      let selectedFile = null;
+
+      dropZone.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        dropZone.classList.add("dragover");
+      });
+      dropZone.addEventListener("dragleave", () =>
+        dropZone.classList.remove("dragover"),
+      );
+      dropZone.addEventListener("drop", (e) => {
+        e.preventDefault();
+        dropZone.classList.remove("dragover");
+        const f = e.dataTransfer.files[0];
+        if (f) setFile(f);
+      });
+      fileInput.addEventListener("change", (e) => {
+        if (e.target.files[0]) setFile(e.target.files[0]);
+      });
+
+      function setFile(f) {
+        selectedFile = f;
+        document.getElementById("fcName").textContent = f.name;
+        document.getElementById("fcSize").textContent = formatBytes(f.size);
+        fileChosen.classList.add("show");
+        btnCheck.disabled = false;
+        result.classList.remove("show");
+        errorCard.classList.remove("show");
+      }
+
+      function formatBytes(b) {
+        if (b < 1024 * 1024) return (b / 1024).toFixed(1) + " KB";
+        return (b / (1024 * 1024)).toFixed(1) + " MB";
+      }
+
+      btnCheck.addEventListener("click", async () => {
+        if (!selectedFile) return;
+        btnCheck.style.display = "none";
+        loadingState.classList.add("show");
+        result.classList.remove("show");
+        errorCard.classList.remove("show");
+
+        const fd = new FormData();
+        fd.append("video", selectedFile);
+
+        try {
+          const res = await fetch("/analyze", { method: "POST", body: fd });
+          const data = await res.json();
+          loadingState.classList.remove("show");
+          btnCheck.style.display = "flex";
+          btnCheck.disabled = false;
+          if (data.error) {
+            showError(data.error);
+            return;
+          }
+          renderResult(data);
+        } catch (e) {
+          loadingState.classList.remove("show");
+          btnCheck.style.display = "flex";
+          btnCheck.disabled = false;
+          showError("Não foi possível conectar ao servidor.");
+        }
+      });
+
+      function showError(msg) {
+        document.getElementById("errorText").textContent = msg;
+        errorCard.classList.add("show");
+      }
+
+      const LABELS = {
+        texture_uniformity: [
+          "Textura da imagem",
+          "Superfície artificial excessivamente lisa",
+        ],
+        color_anomaly: ["Distribuição de cores", "Cores com padrão incomum"],
+        frequency_artifacts: [
+          "Padrão de frequência",
+          "Assinatura espectral de IA",
+        ],
+        noise_pattern: ["Padrão de ruído", "Ruído estruturado (não aleatório)"],
+        compression_pattern: [
+          "Compressão do vídeo",
+          "Blocos inconsistentes com câmera real",
+        ],
+        temporal_inconsistency: [
+          "Estabilidade entre frames",
+          "Tremido ou piscadas artificiais",
+        ],
+        motion_unnaturalness: [
+          "Naturalidade do movimento",
+          "Movimentos mecânicos ou erráticos",
+        ],
+        facial_artifacts: [
+          "Rostos encontrados",
+          "Simetria excessiva e bordas suaves",
+        ],
+        yolo_anomaly: ["Detecção YOLOv8", "Objetos com baixa confiança"],
+      };
+
+      function renderResult(d) {
+        const c = d.color || "yellow";
+        const pct = Math.round(d.ai_probability * 100);
+
+        const mains = {
+          red: "Este conteúdo provavelmente foi criado por IA",
+          orange: "Este conteúdo é suspeito",
+          yellow: "Não foi possível determinar com certeza",
+          green: "Este conteúdo parece ser real",
+        };
+        const subs = {
+          red: "Vários indicadores apontam para geração artificial.",
+          orange: "Existem indícios de conteúdo sintético.",
+          yellow: "As análises deram resultados mistos.",
+          green: "A maioria dos indicadores é consistente com gravação real.",
+        };
+
+        document.getElementById("resultCard").className = "result-card " + c;
+        document.getElementById("verdictBand").className = "verdict-band " + c;
+        document.getElementById("verdictIcon").className = "verdict-icon " + c;
+        document.getElementById("verdictIcon").innerHTML = VERDICT_ICONS[c];
+        document.getElementById("verdictMain").className = "verdict-main " + c;
+        document.getElementById("verdictMain").textContent = mains[c];
+        document.getElementById("verdictSub").textContent = subs[c];
+        document.getElementById("probNum").className = "prob-num " + c;
+        document.getElementById("probNum").textContent = pct + "%";
+
+        document.getElementById("metaDur").textContent =
+          d.details.duration_sec + "s";
+        document.getElementById("metaFps").textContent = d.details.fps;
+        document.getElementById("metaFrames").textContent =
+          d.details.frames_analyzed;
+        document.getElementById("metaFaces").textContent = d.details
+          .faces_detected
+          ? "Sim"
+          : "Não";
+
+        let plain = "";
+        if (c === "red")
+          plain = `Nosso sistema encontrou <strong>várias características típicas de IA</strong> neste arquivo. <strong>Pense bem antes de acreditar ou compartilhar.</strong>`;
+        else if (c === "orange")
+          plain = `Encontramos <strong>alguns sinais suspeitos</strong>. <strong>Recomendamos verificar a origem antes de compartilhar.</strong>`;
+        else if (c === "yellow")
+          plain = `Os indicadores não chegaram a um resultado claro. <strong>Tente verificar em outras fontes confiáveis.</strong>`;
+        else
+          plain = `Os indicadores são <strong>consistentes com um vídeo ou foto real</strong>. Não encontramos sinais evidentes de IA.`;
+
+        document.getElementById("plainText").innerHTML = plain;
+
+        const list = document.getElementById("indList");
+        list.innerHTML = "";
+        for (const [key, val] of Object.entries(d.scores)) {
+          const level = val >= 0.55 ? "high" : val >= 0.35 ? "medium" : "low";
+          const [label, desc] = LABELS[key] || [key, ""];
+          const item = document.createElement("div");
+          item.className = "ind-item";
+          item.innerHTML = `
+      <div class="ind-dot ${level}"></div>
+      <div style="flex:1">
+        <div class="ind-label">${label}</div>
+        <div class="ind-desc">${desc}</div>
+      </div>
+      <div class="ind-bar-wrap">
+        <div class="ind-bar-bg">
+          <div class="ind-bar-fill ${level}" data-w="${val * 100}"></div>
+        </div>
+        <div class="ind-pct">${Math.round(val * 100)}%</div>
+      </div>`;
+          list.appendChild(item);
+        }
+        setTimeout(() => {
+          document.querySelectorAll(".ind-bar-fill").forEach((el) => {
+            el.style.width = el.dataset.w + "%";
+          });
+        }, 100);
+
+        result.classList.add("show");
+        result.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    </script>
+  </body>
+</html>
