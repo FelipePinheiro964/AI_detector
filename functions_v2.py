@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import os
 
 def score_texture_uniformity(frame):
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -105,9 +106,14 @@ def score_motion_naturalness(frames):
 
 def score_facial_artifacts(frame):
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    cascade = cv2.CascadeClassifier(
-        cv2.data.haarcascades + 'haarcascade_frontalface_default.xml'
+    cascade_path = os.path.join(
+        os.path.dirname(os.path.abspath(cv2.__file__)),
+        'data',
+        'haarcascade_frontalface_default.xml'
     )
+    if not os.path.exists(cascade_path):
+        return None
+    cascade = cv2.CascadeClassifier(cascade_path)
     faces = cascade.detectMultiScale(gray, 1.1, 4, minSize=(60, 60))
     if len(faces) == 0:
         return None
