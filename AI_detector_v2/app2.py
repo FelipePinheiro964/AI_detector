@@ -1,7 +1,7 @@
 import os
 import uuid
 from flask import Flask, request, jsonify, render_template
-from analyzer import analyze
+from AI_detector_v2.analyzer import analyze
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 500 * 1024 * 1024
