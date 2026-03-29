@@ -76,3 +76,25 @@ def score_motion_naturalness(frames):
     if accel_var < 0.001: return 0.65
     if accel_var > 50:    return 0.60
     return 0.20
+
+def score_facial_artifacts(frame):
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    cascade = cv2.CascadeClassifier(
+        cv2.data.haarcascades + 'haarcascade_frontalface_default.xml'
+    )
+    faces = cascade.detectMultiScale(gray, 1.1, 4, minSize=(60, 60))
+    if len(faces) == 0:
+        return None
+    scores = []
+    for (x, y, w, h) in faces:
+        roi   = gray[y:y+h, x:x+w]
+        left  = roi[:, :w//2]
+        right = cv2.flip(roi[:, w//2:], 1)
+        min_w = min(left.shape[1], right.shape[1])
+        symmetry  = 1 - np.abs(left[:, :min_w].astype(float) - right[:, :min_w].astype(float)).mean() / 255
+        edge_ratio = cv2.Canny(roi, 50, 150).sum() / (255 * roi.size + 1e-7)
+        s = 0.0
+        if symmetry > 0.92:   s += 0.35
+        if edge_ratio < 0.03: s += 0.30
+        scores.append(min(s, 0.85))
+    return float(np.mean(scores))

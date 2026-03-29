@@ -1,0 +1,14 @@
+# Uploads temporários (dados de usuários)
+static/uploads/
+
+# Ambiente virtual
+venv/
+__pycache__/
+*.pyc
+
+# Variáveis de ambiente (senhas, chaves)
+.env
+
+# Sistema
+.DS_Store
+Thumbs.db

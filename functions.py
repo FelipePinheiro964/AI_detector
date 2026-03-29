@@ -28,9 +28,10 @@ def foto(uploaded_file, model, conf_threshold):
             st.write("A detecção não identificou anomalias na imagem.")
 
 def video(uploaded_video, model, conf_threshold):
-    with tempfile.NamedTemporaryFile(delete=False, suffix='.mp4') as tfile:
-        tfile.write(uploaded_video.read())
-        temp_path = tfile.name
+    # 1. Mudança: Usar um caminho fixo temporário evita que o Streamlit reinicie por detectar novos arquivos
+    temp_path = "temp_video.mp4"
+    with open(temp_path, "wb") as f:
+        f.write(uploaded_video.read())
 
     cap = cv2.VideoCapture(temp_path)
     st_frame = st.empty()
@@ -41,28 +42,30 @@ def video(uploaded_video, model, conf_threshold):
 
     while cap.isOpened():
         ret, frame = cap.read()
-        if not ret:
-            break
+        if not ret: break
         
-        frame = cv2.resize(frame, (640, 480))
         results = model(frame, conf=conf_threshold, verbose=False)
-
         agora = time.time()
+        
         for r in results:
             if any(box.conf < 0.5 for box in r.boxes):
                 if agora - ultimo_alerta > intervalo_seguranca:
-                    alerta_site.error("🚨 ANOMALIA DETECTADA: Inconsistência visual identificada!")
+                    alerta_site.error("⚠️ ANOMALIA DETECTADA!")
                     ultimo_alerta = agora
 
         annotated_frame = results[0].plot()
         annotated_frame = cv2.cvtColor(annotated_frame, cv2.COLOR_BGR2RGB)
+        
+        # 2. Mudança: O 'st_frame.image' precisa atualizar o mesmo container
         st_frame.image(annotated_frame, channels="RGB", use_container_width=True)
-        time.sleep(0.05)
+        
+        # Essencial para ceder tempo ao processador do servidor
+        time.sleep(0.03) 
 
     cap.release()
+    # Limpa o ficheiro ao terminar
     if os.path.exists(temp_path):
         os.remove(temp_path)
-
 
 
 # Não funciona em nuvem
