@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import os
 
-from AI_detector_v2.functions_v2 import (
+from functions_v2 import (
     score_texture_uniformity,
     score_color_distribution,
     score_frequency_analysis,
